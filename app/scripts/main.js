@@ -1,22 +1,60 @@
+var teamsJson = {
+    "Bears" : {
+        lat: 0,
+        lng: 0,
+        color: "",
+        logo: "",
+    },
+    "Blackhawks" : {
+        lat: 0,
+        lng: 0,
+        color: "",
+        logo: "",
+    },
+    "Bulls" : {
+        lat: 0,
+        lng: 0,
+        color: "",
+        logo: "",
+    },
+    "Cubs" : {
+        lat: 0,
+        lng: 0,
+        color: "",
+        logo: "",
+    },
+    "White Sox" : {
+        lat: 0,
+        lng: 0,
+        color: "",
+        logo: "",
+    },
+}
+
 var map;
 function initMap() {
     // Constructor creates a new map - only center and zoom are required.
     map = new google.maps.Map(document.getElementById('map'), {
-      center: {lat: 40.7413549, lng: -73.9980244},
-      zoom: 13,
+      center: {lat: 41.880748, lng: -87.674265},
+      zoom: 12,
       mapTypeControl: false
     });
 }
 
-// Here's my data model
-var ViewModel = function(first, last) {
-    this.firstName = ko.observable(first);
-    this.lastName = ko.observable(last);
- 
-    this.fullName = ko.pureComputed(function() {
-        // Knockout tracks dependencies automatically. It knows that fullName depends on firstName and lastName, because these get called when evaluating fullName.
-        return this.firstName() + " " + this.lastName();
-    }, this);
+
+function TeamsViewModel() {
+    // Data
+    var self = this;
+    self.teams = [];
+    for(var t in teamsJson) self.teams.push(t);
+    self.chosenTeam = ko.observable();
+    self.chosenTeamData = ko.observable();
+
+    // Behaviours
+    self.goToTeam = function(team) { 
+        self.chosenTeam(team);
+        // CHANGE THIS $.get('', { team: team }, self.chosenFolderData); 
+    };
 };
- 
-ko.applyBindings(new ViewModel("Planet", "Earth")); // This makes Knockout get to work
+
+ko.applyBindings(new TeamsViewModel());

@@ -22,24 +22,27 @@
         <nav class="navbar navbar-default navbar-offcanvas navbar-offcanvas-touch" role="navigation" id="js-bootstrap-offcanvas">
             <div class="container-fluid">
                 <div class="navbar-header">
-                    <a class="navbar-brand" href="#">Neighborhood Map</a>
+                    <a class="navbar-brand" href="#">Game Day in Chicago</a>
                 </div>
                 <div>
                     <ul class="nav navbar-nav">
-                        <li class="active"><a href="#">Link</a></li>
-                        <li><a href="#">Link</a></li>
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" id="js-dropdown-test">Another Link <span class="caret"></span></a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li><a href="#">Action</a></li>
-                                <li><a href="#">Another action</a></li>
-                                <li><a href="#">Something else here</a></li>
+                            <a href="#" class="dropdown-toggle" id="js-dropdown-test2">Select Team<span class="caret"></span></a>
+                            <!-- Teams -->
+                            <ul class="dropdown-menu" role="menu" data-bind="foreach: teams">
                                 <li class="divider"></li>
-                                <li><a href="#">Separated link</a></li>
-                                <li class="divider"></li>
-                                <li><a href="#">One more separated link</a></li>
+                                <li data-bind="text: $data, 
+                                css: { selected: $data == $root.chosenTeam() },
+                                click: $root.goToTeam"></li>
                             </ul>
                         </li>
+                    </ul>
+
+                    <div id="teamlogo" data-bind="text: chosenTeam"></div>
+
+                    <ul class="nav navbar-nav">    
+                        <li class="active"><a href="#">Bars</a></li>
+                        <li><a href="#">Parking</a></li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" id="js-dropdown-test2">Another Link <span class="caret"></span></a>
                             <ul class="dropdown-menu" role="menu">
@@ -59,11 +62,6 @@
                         </div>
                         <button type="submit" class="btn btn-default">Submit</button>
                     </form>
-                    <ul class="nav navbar-nav navbar-right">
-                        <li>Hello, <span data-bind="text: fullName"> </span>!</li>
-                        <li>First name: <input data-bind="value: firstName" /></li>
-                        <li>Last name: <input data-bind="value: lastName" /></li>
-                    </ul>
                 </div>
             </div>
         </nav>
