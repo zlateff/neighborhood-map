@@ -19,11 +19,27 @@ nav {
     height: 99%;
     width: 100%;
     padding: 20px;
-    border-radius: 10%;
 }
 #map {
     height: 100%;
     width: auto;
+}
+#teambox {
+    clear: both;
+}
+#teamlogo {
+    height: 130px;
+    width: 130px;
+    display: inline-block;
+}
+#teamname {
+    font-size: 2em;
+    clear: left;
+}
+.logo {
+    display: inline-block;
+    width: 128px;
+    height: 128px;
 }
 
 @media (max-width: 767px) {
@@ -33,6 +49,9 @@ nav {
     }
     nav {
         margin-top: 0;
+    }
+    #mapbox {
+        padding: 0;
     }
     #map {
         height: 90%;

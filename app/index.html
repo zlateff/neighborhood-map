@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="styles/bootstrap.offcanvas.css"/>
     <link rel="stylesheet" type="text/css" media="screen" href="styles/main.css" />
 </head>
-<body class="body-offcanvas">
+<body class="body-offcanvas" data-bind="style:{ 'background-color' :  bg_color }">
     <header class="clearfix">
         <button type="button" class="navbar-toggle offcanvas-toggle" data-toggle="offcanvas" data-target="#js-bootstrap-offcanvas" id="offcanvas-toggle">
             <span class="sr-only">Toggle navigation</span>
@@ -38,7 +38,10 @@
                         </li>
                     </ul>
 
-                    <div id="teamlogo" data-bind="text: chosenTeam"></div>
+                    <div id="teambox">
+                        <div id="teamlogo" data-bind="html: teamLogo"></div>
+                        <div id="teamname" data-bind="text: chosenTeam"></div>
+                    </div>
 
                     <ul class="nav navbar-nav">    
                         <li class="active"><a href="#">Bars</a></li>
