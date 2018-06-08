@@ -1,3 +1,31 @@
-.row {
-    padding: 10px;
+html, body {
+    height: 100%;
+}
+header {
+    height: 100%;
+    width: 25%;
+    float: left;
+}
+nav {
+    height: 95%;
+}
+#mapbox {
+    height: 100%;
+    width: 100%;
+    padding: 20px;
+}
+#map {
+    height: 100%;
+    width: auto;
+}
+
+@media (max-width: 767px) {
+    header {
+        height: 50px;
+        width: 100%;
+    }
+    #map {
+        height: 90%;
+        width: 100%;
+    }
 }
