@@ -39,6 +39,10 @@ nav {
     height: 100%;
     width: auto;
 }
+#pano {
+    width: 200px;
+    height: 200px;
+}
 #teambox {
     clear: both;
 }
