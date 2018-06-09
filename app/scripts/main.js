@@ -112,23 +112,28 @@ function initMap() {
         // For each place, get the icon, name and location
         createMarkersForPlaces(places);
         if (places.length == 0) {
-            window.alert('We did not find any places matching that search!')
+            window.alert('We did not find any places matching that search!');
         }
     }
 
     // This function fires when the user hits the 'Go' button for places search
     function textSearchPlaces() {
-        var bounds = map.getBounds();
-        hideMarkers(placeMarkers);
-        var placesService = new google.maps.places.PlacesService(map);
-        placesService.textSearch({
-            query: document.getElementById('places-search').value,
-            bounds: bounds
-        }, function(results, status) {
-            if (status === google.maps.places.PlacesServiceStatus.OK) {
-                createMarkersForPlaces(results);
-            }
-        });
+        var place = document.getElementById('places-search').value;
+        if (place == '') {
+            window.alert('Please enter a place!');
+        } else {
+            var bounds = map.getBounds();
+            hideMarkers(placeMarkers);
+            var placesService = new google.maps.places.PlacesService(map);
+            placesService.textSearch({
+                query: place,
+                bounds: bounds
+            }, function(results, status) {
+                if (status === google.maps.places.PlacesServiceStatus.OK) {
+                    createMarkersForPlaces(results);
+                }
+            });
+        }
     }
 
     // This functions creates markers for each place found in places search
