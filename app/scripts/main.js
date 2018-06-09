@@ -36,7 +36,12 @@ var teamsJson = {
 }
 
 var map;
+
+// Create a blank array for all team markers
 var markers = [];
+
+// Create placemarkers array to use in functions that serach for places
+var placeMarkers = [];
 
 function initMap() {
     // Constructor creates a new map - only center and zoom are required.
@@ -83,46 +88,120 @@ function initMap() {
     // Display all markers on initialize
     showMarkers();
 
-    // This function populates the infowindow when the marker is clicked
-    function populateInfoWindow(marker, infowindow) {
-        // Check to make sure the infowindow is not already opened on this marker
-        if (infowindow.marker != marker) {
-            infowindow.marker = marker;
-            // Clear the infowindow content
-            infowindow.setContent('');
-            infowindow.marker = marker;
-            // Make sure the marker property is cleared if the infowindow is closed
-            infowindow.addListener('closeclick', function(){
-                infowindow.marker = null;
-            });
-            var streetViewService = new google.maps.StreetViewService();
-            var radius = 50;
-            function getStreetView(data, status) {
-                if (status == google.maps.StreetViewStatus.OK) {
-                    var nearStreetViewLocation = data.location.latLng;
-                    var heading = google.maps.geometry.spherical.computeHeading(
-                                    nearStreetViewLocation, marker.position);
-                    infowindow.setContent('<div>' + marker.title + '</div><div id="pano"></div>');
-                    var panoramaOptions = {
-                        position: nearStreetViewLocation,
-                        pov: {
-                            heading: heading,
-                            pitch: 30
-                        }
-                    };
-                    var panorama = new google.maps.StreetViewPanorama(
-                            document.getElementById('pano'), panoramaOptions);
-                } else {
-                    infowindow.setContent('<div>' + marker.title + '</div>' +
-                        '<div>No Street View Found</div>');
-                }
-            }
-            // Use streetview to get the closest streetview image within 50 meters
-            streetViewService.getPanoramaByLocation(marker.position, radius, getStreetView);
-            // Open the infowindow on the correct marker
-            infowindow.open(map, marker);
-        } 
+    // Create a searchbox for executing places search
+    var searchBox = new google.maps.places.SearchBox(
+        document.getElementById('places-search'));
+    // Bias the SearchBox results towards current map's viewport.
+    map.addListener('bounds_changed', function() {
+        searchBox.setBounds(map.getBounds());
+    });
+
+    // Add event listener to searchbox Go button
+    document.getElementById('go-places').addEventListener('click', textSearchPlaces);
+    
+    // Event listener for prediction list selection
+    searchBox.addListener('places_changed', function() {
+        searchBoxPlaces(this);
+    });
+
+    // This function fires when users selects a serchbox item,
+    // It will do a nearby search using the selected query string or place
+    function searchBoxPlaces() {
+        hideMarkers(placeMarkers);
+        var places = searchBox.getPlaces();
+        // For each place, get the icon, name and location
+        createMarkersForPlaces(places);
+        if (places.length == 0) {
+            window.alert('We did not find any places matching that search!')
+        }
     }
+
+    // This function fires when the user hits the 'Go' button for places search
+    function textSearchPlaces() {
+        var bounds = map.getBounds();
+        hideMarkers(placeMarkers);
+        var placesService = new google.maps.places.PlacesService(map);
+        placesService.textSearch({
+            query: document.getElementById('places-search').value,
+            bounds: bounds
+        }, function(results, status) {
+            if (status === google.maps.places.PlacesServiceStatus.OK) {
+                createMarkersForPlaces(results);
+            }
+        });
+    }
+
+    // This functions creates markers for each place found in places search
+    function createMarkersForPlaces(places) {
+        var bounds = new google.maps.LatLngBounds();
+        for (var i = 0; i < places.length; i++) {
+            var place = places[i];
+            var icon = {
+                url: place.icon,
+                size: new google.maps.Size(35, 35),
+                origin: new google.maps.Point(0, 0),
+                anchor: new google.maps.Point(15, 34),
+                scaledSize: new google.maps.Size(25, 25)
+            };
+            // Create a marker for each place
+            var marker = new google.maps.Marker({
+                map: map,
+                icon: icon,
+                title: place.name,
+                position: place.geometry.location,
+                id: place.id
+            });
+            placeMarkers.push(marker);
+            if (place.geometry.viewport) {
+                // Only geocodes have viewport
+                bounds.union(place.geometry.viewport);
+            } else {
+                bounds.extend(place.geometry.location);
+            }
+        }
+        map.fitBounds(bounds);
+    }
+}
+
+// This function populates the infowindow when the marker is clicked
+function populateInfoWindow(marker, infowindow) {
+    // Check to make sure the infowindow is not already opened on this marker
+    if (infowindow.marker != marker) {
+        infowindow.marker = marker;
+        // Clear the infowindow content
+        infowindow.setContent('');
+        infowindow.marker = marker;
+        // Make sure the marker property is cleared if the infowindow is closed
+        infowindow.addListener('closeclick', function(){
+            infowindow.marker = null;
+        });
+        var streetViewService = new google.maps.StreetViewService();
+        var radius = 50;
+        function getStreetView(data, status) {
+            if (status == google.maps.StreetViewStatus.OK) {
+                var nearStreetViewLocation = data.location.latLng;
+                var heading = google.maps.geometry.spherical.computeHeading(
+                                nearStreetViewLocation, marker.position);
+                infowindow.setContent('<div>' + marker.title + '</div><div id="pano"></div>');
+                var panoramaOptions = {
+                    position: nearStreetViewLocation,
+                    pov: {
+                        heading: heading,
+                        pitch: 30
+                    }
+                };
+                var panorama = new google.maps.StreetViewPanorama(
+                        document.getElementById('pano'), panoramaOptions);
+            } else {
+                infowindow.setContent('<div>' + marker.title + '</div>' +
+                    '<div>No Street View Found</div>');
+            }
+        }
+        // Use streetview to get the closest streetview image within 50 meters
+        streetViewService.getPanoramaByLocation(marker.position, radius, getStreetView);
+        // Open the infowindow on the correct marker
+        infowindow.open(map, marker);
+    } 
 }
 
 // This function will loop through the markers array and display them all
@@ -136,8 +215,8 @@ function showMarkers() {
     map.fitBounds(bounds);
 }
 
-// This function will loop through the markers and hide them all
-function hideMarkers() {
+// This function will loop through a markers array and hide them all
+function hideMarkers(markers) {
     for (var i = 0; i < markers.length; i++) {
         markers[i].setMap(null);
     }
@@ -145,11 +224,12 @@ function hideMarkers() {
 
 // This function will display marker for a specific team only
 function putMarker(id) {
-    hideMarkers();
+    hideMarkers(markers);
     markers[id].setMap(map);
     map.setCenter(markers[id].position);
     map.setZoom(15);
 }
+
 
 
 function TeamsViewModel() {
