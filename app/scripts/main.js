@@ -53,7 +53,7 @@ function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
       center: {lat: 41.897745, lng: -87.645179},
       zoom: 12,
-      // mapTypeControl: false
+      mapTypeControl: false
     });
 
     var largeInfowindow = new google.maps.InfoWindow();

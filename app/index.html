@@ -27,16 +27,16 @@
                 <div>
                     <ul class="nav navbar-nav">
                         <li class="dropdown">
-                            <a href="" class="dropdown-toggle" id="js-dropdown-test2">Select Team<span class="caret"></span></a>
+                            <a href="" class="dropdown-toggle team-btn" id="js-dropdown-test2">Select Team<span class="caret"></span></a>
                             <!-- Teams -->
                             <ul class="dropdown-menu" role="menu" data-bind="foreach: teams">
                                 <li class="divider"></li>
-                                <li data-bind="text: $data, 
+                                <li class="team-li" data-bind="text: $data, 
                                 css: { selected: $data == $root.chosenTeam() },
                                 click: $root.goToTeam"></li>
                             </ul>
                         </li>
-                        <li><a href="" data-bind="click: showAll">Show All Teams</a></li>
+                        <li><a href="" class="team-btn" data-bind="click: showAll">Show All Teams</a></li>
                     </ul>
 
                     <div id="teambox">
