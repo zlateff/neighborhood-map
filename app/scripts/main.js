@@ -327,7 +327,7 @@ function getNews(team) {
                 data: data,
                 status: response.status
             })).then(res => {
-                var html = '<div>';
+                var html = '<div><h4>Latest ' + team + ' news:</h4>';
                 if (res.status == 200) {
                     var articles = res.data.articles;
                     if (articles.length == 0) {
@@ -335,11 +335,16 @@ function getNews(team) {
                     } else {
                         console.log(articles);
                         html += '<ul>';
+                        var lasttitle = '';
                         for(a in articles) {
-                            html += '<li>' + articles[a].title + '</li>';
+                            var title = articles[a].title;
+                            if (title != lasttitle) {
+                                html += '<li><a href="' + articles[a].url + '" target="_blank">' + title + '</a></li>';
+                                html += '<li class="newsdivider"></li>';
+                                lasttitle = title;
+                            }
                         }
                         html += '</ul>';
-                        console.log(html);
                     }
                 } else {
                     html += '<span>News articles could not be loaded!</span>';
