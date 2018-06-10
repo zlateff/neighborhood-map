@@ -72,6 +72,7 @@ function initMap() {
         markers.push(marker);
         // Create an onclick event to open an infowindow at each marker
         marker.addListener('click', function() {
+            viewModel.goToTeam(this.title);
             populateInfoWindow(this, largeInfowindow);
         });
         // Two event listeners - one for mouseover, one for mouseout,
@@ -314,17 +315,20 @@ function TeamsViewModel() {
     self.chosenTeam = ko.observable();
     self.bg_color = ko.observable();
     self.teamLogo = ko.observable();
+    self.showSearch = ko.observable(false);
 
     // Behaviours
     self.goToTeam = function(team) { 
         self.chosenTeam(team);
         self.bg_color('#' + teamsJson[team].color);
         self.teamLogo(teamsJson[team].logo);
+        self.showSearch(true);
         putMarker(teamsJson[team].id);
     };
     self.showAll = function() {
         showMarkers();
         hideMarkers(placeMarkers);
+        self.showSearch(false);
         self.bg_color('#9795A3');
         self.chosenTeam('');
         self.teamLogo('');
@@ -340,4 +344,5 @@ function TeamsViewModel() {
     }
 };
 
-ko.applyBindings(new TeamsViewModel());
+var viewModel = new TeamsViewModel();
+ko.applyBindings(viewModel);

@@ -45,30 +45,33 @@
                         <div id="teamname" data-bind="text: chosenTeam"></div>
                     </div>
 
-                    <ul class="nav navbar-nav">    
-                        <li><a class="places-button" href="" data-bind="click: showBars">Bars</a></li>
-                        <li><a class="places-button" href="" data-bind="click: showParking">Parking</a></li>
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" id="js-dropdown-test2">Another Link <span class="caret"></span></a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li><a href="#">Action</a></li>
-                                <li><a href="#">Another action</a></li>
-                                <li><a href="#">Something else here</a></li>
-                                <li class="divider"></li>
-                                <li><a href="#">Separated link</a></li>
-                                <li class="divider"></li>
-                                <li><a href="#">One more separated link</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                    <div class="navbar-form navbar-left">
-                        <label for="places-search">Search for Nearby Places:</label><br>
-                        <div class="form-group">
-                            <input type="text" id="places-search" class="form-control" placeholder="Ex: Bars, Restaurants">
+                    <div data-bind="visible: showSearch">
+                        <ul class="nav navbar-nav">    
+                            <li><a class="places-button" href="" data-bind="click: showBars, style:{ 'background-color' :  bg_color }">Bars</a></li>
+                            <li><a class="places-button" href="" data-bind="click: showParking, style:{ 'background-color' :  bg_color }">Parking</a></li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" id="js-dropdown-test2">Another Link <span class="caret"></span></a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a href="#">Action</a></li>
+                                    <li><a href="#">Another action</a></li>
+                                    <li><a href="#">Something else here</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="#">Separated link</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="#">One more separated link</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <div class="navbar-form navbar-left">
+                            <label for="places-search">Search for Nearby Places:</label><br>
+                            <div class="form-group">
+                                <input type="text" id="places-search" class="form-control" placeholder="Ex: Bars, Restaurants">
+                            </div>
+                            <input type="button" id="go-places" class="btn btn-default" value="Go">
+                            <input type="button" class="btn btn-default" value="Clear All Places" data-bind="click: clearAll">
                         </div>
-                        <input type="button" id="go-places" class="btn btn-default" value="Go">
-                        <input type="button" class="btn btn-default" value="Clear All Places" data-bind="click: clearAll">
                     </div>
+
                 </div>
             </div>
         </nav>
