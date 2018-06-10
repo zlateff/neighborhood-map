@@ -310,6 +310,13 @@ function searchForPlaces(place) {
     });
 }
 
+// This function gets ESPN news about a team
+function getNews(team) {
+    viewModel.showNews(true);
+    var html = '<div>' + team + '</div>';
+    viewModel.newsArticles(html);
+}
+
 
 function TeamsViewModel() {
     // Data
@@ -321,6 +328,8 @@ function TeamsViewModel() {
     self.teamLogo = ko.observable();
     self.showSearch = ko.observable(false);
     self.searchInput = ko.observable();
+    self.showNews = ko.observable(false);
+    self.newsArticles = ko.observable();
 
     // Behaviours
     self.goToTeam = function(team) { 
@@ -329,6 +338,7 @@ function TeamsViewModel() {
         self.teamLogo(teamsJson[team].logo);
         self.showSearch(true);
         putMarker(teamsJson[team].id);
+        getNews(team);
     };
     self.showAll = function() {
         showMarkers();
@@ -337,6 +347,7 @@ function TeamsViewModel() {
         self.bg_color('#9795A3');
         self.chosenTeam('');
         self.teamLogo('');
+        self.showNews(false);
     };
     self.clearAll = function() {
         self.searchInput(null);
