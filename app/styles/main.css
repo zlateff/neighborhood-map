@@ -38,6 +38,9 @@ nav {
     margin-top: 10px;
     border-radius: 8px;
 }
+.search-el {
+    margin-top: 10px;
+}
 #mapbox {
     height: 99%;
     width: 100%;
@@ -94,5 +97,11 @@ nav {
     #map {
         height: 90%;
         width: 100%;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1200px) {
+    header {
+        width: 35%;
     }
 }

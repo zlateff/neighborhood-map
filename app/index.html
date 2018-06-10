@@ -68,10 +68,10 @@
                     <div class="navbar-form navbar-left">
                         <label for="places-search">Search for Nearby Places:</label><br>
                         <div class="form-group">
-                            <input type="text" id="places-search" class="form-control" placeholder="Ex: Bars, Restaurants" data-bind='value: searchInput'>
+                            <input type="text" id="places-search" class="search-el form-control" placeholder="Ex: Bars, Restaurants" data-bind='value: searchInput'>
                         </div>
-                        <input type="button" id="go-places" class="btn btn-success" value="Go">
-                        <input type="button" class="btn btn-default" value="Clear All Places" data-bind="click: clearAll">
+                        <input type="button" id="go-places" class="search-el btn btn-success" value="Go">
+                        <input type="button" class="search-el btn btn-default" value="Clear All Places" data-bind="click: clearAll">
                     </div>
                     
                     <div class="navbar-form navbar-left" id="news" data-bind="visible: showNews, html: newsArticles">
