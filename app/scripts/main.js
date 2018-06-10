@@ -76,9 +76,13 @@ function initMap() {
             populateInfoWindow(this, largeInfowindow);
         });
         // Two event listeners - one for mouseover, one for mouseout,
-        // to change the colors back and forth.
+        // to bounce marker only once.
         marker.addListener('mouseover', function() {
+            var that = this;
             this.setAnimation(google.maps.Animation.BOUNCE);
+            setTimeout(function () {
+                that.setAnimation(null);
+            }, 700);
         });
         marker.addListener('mouseout', function() {
             this.setAnimation(null);
