@@ -320,6 +320,7 @@ function TeamsViewModel() {
     self.bg_color = ko.observable();
     self.teamLogo = ko.observable();
     self.showSearch = ko.observable(false);
+    self.searchInput = ko.observable();
 
     // Behaviours
     self.goToTeam = function(team) { 
@@ -338,6 +339,7 @@ function TeamsViewModel() {
         self.teamLogo('');
     };
     self.clearAll = function() {
+        self.searchInput(null);
         hideMarkers(placeMarkers);
     }
     self.showBars = function() {
