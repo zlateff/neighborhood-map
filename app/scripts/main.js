@@ -310,11 +310,46 @@ function searchForPlaces(place) {
     });
 }
 
-// This function gets ESPN news about a team
+// This function gets news about a team
 function getNews(team) {
-    viewModel.showNews(true);
-    var html = '<div>' + team + '</div>';
-    viewModel.newsArticles(html);
+    var oneWeekAgo = new Date();
+    oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+    var teamName = '+Chicago+' + team;
+    var url = 'https://newsapi.org/v2/everything?' +
+          'q=' + teamName + '&' +
+          'sources=abc-news,associated-press,bbc-sport,espn,fox-sports,nfl-news,reuters,nhl-news,nbc-news,bleacher-report&' +
+          'from=' + oneWeekAgo.toISOString() + '&' +
+          'apiKey=34bb0e16036c499ca6eec0bcfca34cf1';
+    var req = new Request(url);
+    fetch(req)
+        .then(response => 
+            response.json().then(data => ({
+                data: data,
+                status: response.status
+            })).then(res => {
+                var html = '<div>';
+                if (res.status == 200) {
+                    var articles = res.data.articles;
+                    if (articles.length == 0) {
+                        html +='<span>No articles available.</span>';
+                    } else {
+                        console.log(articles);
+                        html += '<ul>';
+                        for(a in articles) {
+                            html += '<li>' + articles[a].title + '</li>';
+                        }
+                        html += '</ul>';
+                        console.log(html);
+                    }
+                } else {
+                    html += '<span>News articles could not be loaded!</span>';
+                }
+                html += '</div>';
+                viewModel.showArticles(html);
+            })
+        ).catch(function(error) {
+            console.log(error);
+        });
 }
 
 
@@ -360,6 +395,10 @@ function TeamsViewModel() {
     self.showParking = function() {
         self.goToTeam(self.chosenTeam());
         searchForPlaces('parking');
+    }
+    self.showArticles = function(html) {
+        self.newsArticles(html);
+        self.showNews(true);
     }
 };
 
