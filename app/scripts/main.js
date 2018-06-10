@@ -292,7 +292,7 @@ function putMarker(id) {
     hideMarkers(markers);
     markers[id].setMap(map);
     map.setCenter(markers[id].position);
-    map.setZoom(15);
+    map.setZoom(16);
 }
 
 // This function searches for specific types of places and creates markers
@@ -341,9 +341,11 @@ function TeamsViewModel() {
         hideMarkers(placeMarkers);
     }
     self.showBars = function() {
+        self.goToTeam(self.chosenTeam());
         searchForPlaces('bars');
     }
     self.showParking = function() {
+        self.goToTeam(self.chosenTeam());
         searchForPlaces('parking');
     }
 };
