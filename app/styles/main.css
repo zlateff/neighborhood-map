@@ -30,6 +30,13 @@ nav {
     background-color: #261326;
     color: white;
 }
+.places-button {
+    color: white !important;
+    background-color: #7F9871 !important;
+    margin-right: 10px;
+    margin-top: 10px;
+    border-radius: 8px;
+}
 #mapbox {
     height: 99%;
     width: 100%;

@@ -104,6 +104,47 @@ function initMap() {
         searchBoxPlaces(this);
     });
 
+    // This function populates the infowindow when the marker is clicked
+    function populateInfoWindow(marker, infowindow) {
+        // Check to make sure the infowindow is not already opened on this marker
+        if (infowindow.marker != marker) {
+            infowindow.marker = marker;
+            // Clear the infowindow content
+            infowindow.setContent('');
+            infowindow.marker = marker;
+            // Make sure the marker property is cleared if the infowindow is closed
+            infowindow.addListener('closeclick', function(){
+                infowindow.marker = null;
+            });
+            var streetViewService = new google.maps.StreetViewService();
+            var radius = 50;
+            function getStreetView(data, status) {
+                if (status == google.maps.StreetViewStatus.OK) {
+                    var nearStreetViewLocation = data.location.latLng;
+                    var heading = google.maps.geometry.spherical.computeHeading(
+                                    nearStreetViewLocation, marker.position);
+                    infowindow.setContent('<div>' + marker.title + '</div><div id="pano"></div>');
+                    var panoramaOptions = {
+                        position: nearStreetViewLocation,
+                        pov: {
+                            heading: heading,
+                            pitch: 30
+                        }
+                    };
+                    var panorama = new google.maps.StreetViewPanorama(
+                            document.getElementById('pano'), panoramaOptions);
+                } else {
+                    infowindow.setContent('<div>' + marker.title + '</div>' +
+                        '<div>No Street View Found</div>');
+                }
+            }
+            // Use streetview to get the closest streetview image within 50 meters
+            streetViewService.getPanoramaByLocation(marker.position, radius, getStreetView);
+            // Open the infowindow on the correct marker
+            infowindow.open(map, marker);
+        }
+    }
+
     // This function fires when users selects a serchbox item,
     // It will do a nearby search using the selected query string or place
     function searchBoxPlaces() {
@@ -135,134 +176,92 @@ function initMap() {
             });
         }
     }
-
-    // This functions creates markers for each place found in places search
-    function createMarkersForPlaces(places) {
-        var bounds = new google.maps.LatLngBounds();
-        for (var i = 0; i < places.length; i++) {
-            var place = places[i];
-            var icon = {
-                url: place.icon,
-                size: new google.maps.Size(35, 35),
-                origin: new google.maps.Point(0, 0),
-                anchor: new google.maps.Point(15, 34),
-                scaledSize: new google.maps.Size(25, 25)
-            };
-            // Create a marker for each place
-            var marker = new google.maps.Marker({
-                map: map,
-                icon: icon,
-                title: place.name,
-                position: place.geometry.location,
-                id: place.place_id
-            });
-            // Create a single infowindow to be used with the place details information
-            // so that only one is open at once
-            var placeInfoWindow = new google.maps.InfoWindow();
-            // If a marker is clicked, do a place details search on it
-            marker.addListener('click', function() {
-                if (placeInfoWindow.marker == this) {
-                    console.log("This infowindow already is on this marker!")
-                } else {
-                    getPlacesDetails(this, placeInfoWindow);
-                }
-            });
-            placeMarkers.push(marker);
-            if (place.geometry.viewport) {
-                // Only geocodes have viewport
-                bounds.union(place.geometry.viewport);
-            } else {
-                bounds.extend(place.geometry.location);
-            }
-        }
-        map.fitBounds(bounds);
-    }
-
-    // This is the place details search
-    function getPlacesDetails(marker, infowindow) {
-        var service = new google.maps.places.PlacesService(map);
-        service.getDetails({
-            placeId: marker.id
-        }, function(place, status) {
-            if (status === google.maps.places.PlacesServiceStatus.OK) {
-                // Set the marker property on this infowindow so it isn't created again
-                infowindow.marker = marker;
-                var innerHTML = '<div>';
-                if (place.name) {
-                    innerHTML += '<strong>' + place.name + '</strong>';
-                }
-                if (place.formatted_address) {
-                    innerHTML += '<br>' + place.formatted_address;
-                }
-                if (place.formatted_phone_number) {
-                    innerHTML += '<br>' + place.formatted_phone_number;
-                }
-                if (place.opening_hours) {
-                    innerHTML += '<br><br><strong>Hours:</strong><br>' +
-                        place.opening_hours.weekday_text[0] + '<br>' +
-                        place.opening_hours.weekday_text[1] + '<br>' +
-                        place.opening_hours.weekday_text[2] + '<br>' +
-                        place.opening_hours.weekday_text[3] + '<br>' +
-                        place.opening_hours.weekday_text[4] + '<br>' +
-                        place.opening_hours.weekday_text[5] + '<br>' +
-                        place.opening_hours.weekday_text[6];
-                }
-                if (place.photos) {
-                    innerHTML += '<br><br><img src="' + place.photos[0].getUrl(
-                        {maxHeight: 100, maxWidth: 200}) + '">';
-                }
-                innerHTML += '</div>';
-                infowindow.setContent(innerHTML);
-                infowindow.open(map, marker);
-                // Make sure the marker property is cleared if the infowindow is closed.
-                infowindow.addListener('closeclick', function() {
-                    infowindow.marker = null;
-                });
-            }
-        });
-    }
-
 }
 
-// This function populates the infowindow when the marker is clicked
-function populateInfoWindow(marker, infowindow) {
-    // Check to make sure the infowindow is not already opened on this marker
-    if (infowindow.marker != marker) {
-        infowindow.marker = marker;
-        // Clear the infowindow content
-        infowindow.setContent('');
-        infowindow.marker = marker;
-        // Make sure the marker property is cleared if the infowindow is closed
-        infowindow.addListener('closeclick', function(){
-            infowindow.marker = null;
+// This functions creates markers for each place found in places search
+function createMarkersForPlaces(places) {
+    var bounds = new google.maps.LatLngBounds();
+    for (var i = 0; i < places.length; i++) {
+        var place = places[i];
+        var icon = {
+            url: place.icon,
+            size: new google.maps.Size(35, 35),
+            origin: new google.maps.Point(0, 0),
+            anchor: new google.maps.Point(15, 34),
+            scaledSize: new google.maps.Size(25, 25)
+        };
+        // Create a marker for each place
+        var marker = new google.maps.Marker({
+            map: map,
+            icon: icon,
+            title: place.name,
+            position: place.geometry.location,
+            id: place.place_id
         });
-        var streetViewService = new google.maps.StreetViewService();
-        var radius = 50;
-        function getStreetView(data, status) {
-            if (status == google.maps.StreetViewStatus.OK) {
-                var nearStreetViewLocation = data.location.latLng;
-                var heading = google.maps.geometry.spherical.computeHeading(
-                                nearStreetViewLocation, marker.position);
-                infowindow.setContent('<div>' + marker.title + '</div><div id="pano"></div>');
-                var panoramaOptions = {
-                    position: nearStreetViewLocation,
-                    pov: {
-                        heading: heading,
-                        pitch: 30
-                    }
-                };
-                var panorama = new google.maps.StreetViewPanorama(
-                        document.getElementById('pano'), panoramaOptions);
+        // Create a single infowindow to be used with the place details information
+        // so that only one is open at once
+        var placeInfoWindow = new google.maps.InfoWindow();
+        // If a marker is clicked, do a place details search on it
+        marker.addListener('click', function() {
+            if (placeInfoWindow.marker == this) {
+                console.log("This infowindow already is on this marker!")
             } else {
-                infowindow.setContent('<div>' + marker.title + '</div>' +
-                    '<div>No Street View Found</div>');
+                getPlacesDetails(this, placeInfoWindow);
             }
+        });
+        placeMarkers.push(marker);
+        if (place.geometry.viewport) {
+            // Only geocodes have viewport
+            bounds.union(place.geometry.viewport);
+        } else {
+            bounds.extend(place.geometry.location);
         }
-        // Use streetview to get the closest streetview image within 50 meters
-        streetViewService.getPanoramaByLocation(marker.position, radius, getStreetView);
-        // Open the infowindow on the correct marker
-        infowindow.open(map, marker);
-    } 
+    }
+    map.fitBounds(bounds);
+}
+
+// This is the place details search
+function getPlacesDetails(marker, infowindow) {
+    var service = new google.maps.places.PlacesService(map);
+    service.getDetails({
+        placeId: marker.id
+    }, function(place, status) {
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
+            // Set the marker property on this infowindow so it isn't created again
+            infowindow.marker = marker;
+            var innerHTML = '<div>';
+            if (place.name) {
+                innerHTML += '<strong>' + place.name + '</strong>';
+            }
+            if (place.formatted_address) {
+                innerHTML += '<br>' + place.formatted_address;
+            }
+            if (place.formatted_phone_number) {
+                innerHTML += '<br>' + place.formatted_phone_number;
+            }
+            if (place.opening_hours) {
+                innerHTML += '<br><br><strong>Hours:</strong><br>' +
+                    place.opening_hours.weekday_text[0] + '<br>' +
+                    place.opening_hours.weekday_text[1] + '<br>' +
+                    place.opening_hours.weekday_text[2] + '<br>' +
+                    place.opening_hours.weekday_text[3] + '<br>' +
+                    place.opening_hours.weekday_text[4] + '<br>' +
+                    place.opening_hours.weekday_text[5] + '<br>' +
+                    place.opening_hours.weekday_text[6];
+            }
+            if (place.photos) {
+                innerHTML += '<br><br><img src="' + place.photos[0].getUrl(
+                    {maxHeight: 100, maxWidth: 200}) + '">';
+            }
+            innerHTML += '</div>';
+            infowindow.setContent(innerHTML);
+            infowindow.open(map, marker);
+            // Make sure the marker property is cleared if the infowindow is closed.
+            infowindow.addListener('closeclick', function() {
+                infowindow.marker = null;
+            });
+        }
+    });
 }
 
 // This function will loop through the markers array and display them all
@@ -291,6 +290,20 @@ function putMarker(id) {
     map.setZoom(15);
 }
 
+// This function searches for specific types of places and creates markers
+function searchForPlaces(place) {
+    var bounds = map.getBounds();
+    hideMarkers(placeMarkers);
+    var placesService = new google.maps.places.PlacesService(map);
+    placesService.textSearch({
+        query: place,
+        bounds: bounds
+    }, function(results, status) {
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
+            createMarkersForPlaces(results);
+        }
+    });
+}
 
 
 function TeamsViewModel() {
@@ -311,10 +324,20 @@ function TeamsViewModel() {
     };
     self.showAll = function() {
         showMarkers();
+        hideMarkers(placeMarkers);
         self.bg_color('#9795A3');
         self.chosenTeam('');
         self.teamLogo('');
     };
+    self.clearAll = function() {
+        hideMarkers(placeMarkers);
+    }
+    self.showBars = function() {
+        searchForPlaces('bars');
+    }
+    self.showParking = function() {
+        searchForPlaces('parking');
+    }
 };
 
 ko.applyBindings(new TeamsViewModel());
