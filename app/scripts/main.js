@@ -211,6 +211,11 @@ function createMarkersForPlaces(places) {
             if (placeInfoWindow.marker == this) {
                 console.log("This infowindow already is on this marker!")
             } else {
+                var that = this;
+                this.setAnimation(google.maps.Animation.BOUNCE);
+                setTimeout(function () {
+                    that.setAnimation(null);
+                }, 700);
                 getPlacesDetails(this, placeInfoWindow);
             }
         });
@@ -344,7 +349,7 @@ function getNews(team) {
                                 lasttitle = title;
                             }
                         }
-                        html += '</ul>';
+                        html += '<li>Powered by <a href="https://newsapi.org" target="_blank">News API</a></li></ul>';
                     }
                 } else {
                     html += '<span>News articles could not be loaded!</span>';
