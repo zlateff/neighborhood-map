@@ -38,6 +38,19 @@ nav {
     background-color: #261326;
     color: white;
 }
+.fav-btn {
+    color: white !important;
+    background-color: #7F9871 !important;
+    margin-right: 10px;
+    margin-top: 10px;
+    border-radius: 8px;
+}
+.fav-li {
+    width: 250px;
+    padding: 10px;
+    background-color: #7F9871;
+    color: white;
+}
 .places-button {
     color: white !important;
     margin-right: 10px;

@@ -402,12 +402,15 @@ function TeamsViewModel() {
     self.searchInput = ko.observable();
     self.showNews = ko.observable(false);
     self.newsArticles = ko.observable();
-
     // Favorite places array
     self.favorites = ko.observableArray();
+    if (localStorage.getItem('favorites') != null) {
+        self.favorites(JSON.parse(localStorage.getItem('favorites')));
+    }
     self.placeId = ko.observable();
     self.placeName = ko.observable();
     
+
     // Behaviours
     self.goToTeam = function(team) { 
         self.chosenTeam(team);
@@ -454,12 +457,11 @@ function TeamsViewModel() {
         }
         if (flag == 0) {
             self.favorites.push(newFavorite);
+            localStorage.setItem('favorites', JSON.stringify(self.favorites()));
             window.alert('\'' + self.placeName() + '\' was added to your Favorites!');
-            console.log(self.favorites());
         }
     }
     self.goToFavorite = function(place) {
-        console.log(place);
         searchForAPlace(place.id);
     }
 };
