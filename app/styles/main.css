@@ -17,6 +17,12 @@ nav {
     overflow: hidden !important;
     overflow-y: auto !important;
 }
+#title {
+    margin-left: 10px;
+    color: black;
+    font-family: 'Bangers', cursive;
+    font-size: 1.2em;
+}
 .team-btn {
     color: white !important;
     background-color: #261326 !important;
@@ -81,6 +87,9 @@ nav {
 }
 .newsdivider {
     margin-top: 10px;
+}
+#copy {
+    color: white;
 }
 
 @media (max-width: 767px) {

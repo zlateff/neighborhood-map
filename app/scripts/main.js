@@ -241,7 +241,9 @@ function getPlacesDetails(marker, infowindow) {
             infowindow.marker = marker;
             var innerHTML = '<div>';
             if (place.name) {
-                innerHTML += '<strong>' + place.name + '</strong>';
+                innerHTML += '<strong id="placeName">' + place.name + '</strong>';
+                innerHTML += '<span class="hidden" id="placeId">' + place.place_id + '</span>';
+                innerHTML += '<br><strong><a href="#" onclick="SaveFavorite();">Add to Favorites</a></strong>';
             }
             if (place.formatted_address) {
                 innerHTML += '<br>' + place.formatted_address;
@@ -315,6 +317,25 @@ function searchForPlaces(place) {
     });
 }
 
+// This function searches for a place using place id
+function searchForAPlace(placeId) {
+    hideMarkers(placeMarkers);
+    var request = {
+        placeId: placeId,
+    };
+      
+    service = new google.maps.places.PlacesService(map);
+    service.getDetails(request, callback);
+      
+    function callback(place, status) {
+        if (status == google.maps.places.PlacesServiceStatus.OK) {
+            var placesarray = [];
+            placesarray.push({'name': place.name, 'place_id': place.place_id, 'icon': place.icon, 'geometry': place.geometry})
+            createMarkersForPlaces(placesarray);
+        }
+    }
+}
+
 // This function gets news about a team
 function getNews(team) {
     var oneWeekAgo = new Date();
@@ -349,7 +370,7 @@ function getNews(team) {
                                 lasttitle = title;
                             }
                         }
-                        html += '<li>Powered by <a href="https://newsapi.org" target="_blank">News API</a></li></ul>';
+                        html += '<li>Powered by: <a href="https://newsapi.org" target="_blank">News API</a></li></ul>';
                     }
                 } else {
                     html += '<span>News articles could not be loaded!</span>';
@@ -362,6 +383,12 @@ function getNews(team) {
         });
 }
 
+// Function for saving a place to favorites
+function SaveFavorite() {
+    viewModel.placeName(document.getElementById("placeName").innerHTML);
+    viewModel.placeId(document.getElementById("placeId").innerHTML);
+    viewModel.addToFavorites();
+}
 
 function TeamsViewModel() {
     // Data
@@ -376,6 +403,11 @@ function TeamsViewModel() {
     self.showNews = ko.observable(false);
     self.newsArticles = ko.observable();
 
+    // Favorite places array
+    self.favorites = ko.observableArray();
+    self.placeId = ko.observable();
+    self.placeName = ko.observable();
+    
     // Behaviours
     self.goToTeam = function(team) { 
         self.chosenTeam(team);
@@ -409,6 +441,26 @@ function TeamsViewModel() {
     self.showArticles = function(html) {
         self.newsArticles(html);
         self.showNews(true);
+    }
+    self.addToFavorites = function() {
+        var newFavorite = {id: self.placeId(), name: self.placeName()};
+        var flag = 0;
+        for (var i = 0; i < self.favorites().length; i++) {
+            if (self.favorites()[i]['id'] == self.placeId()) {
+                flag++;
+                window.alert('\'' + self.placeName() + '\' is already in your Favorites!');
+                break;
+            }
+        }
+        if (flag == 0) {
+            self.favorites.push(newFavorite);
+            window.alert('\'' + self.placeName() + '\' was added to your Favorites!');
+            console.log(self.favorites());
+        }
+    }
+    self.goToFavorite = function(place) {
+        console.log(place);
+        searchForAPlace(place.id);
     }
 };
 
