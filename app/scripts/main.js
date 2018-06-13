@@ -443,7 +443,13 @@ function TeamsViewModel() {
     }
     self.showArticles = function(html) {
         self.newsArticles(html);
-        self.showNews(true);
+    }
+    self.toggleNews = function() {
+        if (self.showNews()) {
+            self.showNews(false);
+        } else {
+            self.showNews(true);
+        }
     }
     self.addToFavorites = function() {
         var newFavorite = {id: self.placeId(), name: self.placeName()};

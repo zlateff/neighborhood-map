@@ -30,11 +30,11 @@
                 <div>
                     <ul class="nav navbar-nav">
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle team-btn" id="js-dropdown-test2">Select Team<span class="caret"></span></a>
+                            <a href="#" class="dropdown-toggle team-btn">Select Team<span class="caret"></span></a>
                             <!-- Teams -->
                             <ul class="dropdown-menu" role="menu" data-bind="foreach: teams">
                                 <li class="divider"></li>
-                                <li class="team-li" data-bind="text: $data, 
+                                <li class="team-li pointer" data-bind="text: $data, 
                                 css: { selected: $data == $root.chosenTeam() },
                                 click: $root.goToTeam"></li>
                             </ul>
@@ -49,9 +49,13 @@
 
                     <div data-bind="visible: showSearch">
                         <ul class="nav navbar-nav">    
-                            <li><a class="places-button" href="#" data-bind="click: showBars, style:{ 'background-color' :  bg_color }">Bars</a></li>
-                            <li><a class="places-button" href="#" data-bind="click: showParking, style:{ 'background-color' :  bg_color }">Parking</a></li>
+                            <li><button type="button" class="btn places-button" data-bind="click: showBars, style:{ 'background-color' :  bg_color }">Bars</a></li>
+                            <li><button type="button" class="btn places-button" data-bind="click: showParking, style:{ 'background-color' :  bg_color }">Parking</a></li>
+                            <li><button type="button" class="btn places-button dropdown-toggle" data-bind="click: toggleNews, style:{ 'background-color' :  bg_color }">Latest News<span class="caret"></span></button></li>
                         </ul>
+                    </div>
+
+                    <div class="navbar-form navbar-left" id="news" data-bind="visible: showNews, html: newsArticles">
                     </div>
 
                     <div class="navbar-form navbar-left">
@@ -62,29 +66,15 @@
                         <input type="button" id="go-places" class="search-el btn btn-success" value="Go">
                         <input type="button" class="search-el btn btn-default" value="Clear All Places" data-bind="click: clearAll">
                     </div>
-                    <!-- Teams 
-                    <ul class="nav navbar-nav">
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle fav-btn" id="js-dropdown-test2">Favorites<span class="caret"></span></a>
-                            <ul class="dropdown-menu" role="menu" data-bind="foreach: favorites">
-                                <li class="divider"></li>
-                                <li class="fav-li" data-bind="text: $data.name,
-                                click: $root.goToFavorite.bind($data)"></li>
-                            </ul>
-                        </li>
-                    </ul>-->
 
                     <div class="navbar-left btn-group">
                         <button type="button" class="btn fav-btn dropdown-toggle" data-toggle="dropdown">Favorite Places<span class="caret"></span></button>
                         <ul class="dropdown-menu scrollable-menu dropdown-list" role="menu" data-bind="foreach: favorites">
                             <li class="divider"></li>
-                            <li class="fav-li"><div class="li-div"><div class="fav-span" data-bind="text: $data.name,
+                            <li class="fav-li pointer"><div class="li-div"><div class="fav-span" data-bind="text: $data.name,
                                 click: $root.goToFavorite.bind($data)"></div><div class="fa-div"><a href="#" class="favdellink" data-bind="click: $root.removeFavorite.bind($data)"><i class="fas fa-trash-alt"></i></a></div></div></li>
                             </li>
                         </ul>
-                    </div>
-
-                    <div class="navbar-form navbar-left" id="news" data-bind="visible: showNews, html: newsArticles">
                     </div>
 
                 </div>
