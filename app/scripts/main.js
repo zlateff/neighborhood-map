@@ -90,7 +90,7 @@ function initMap() {
         i++;
     }
 
-    // Display all markers on initialize
+    // Display all team markers on initialize
     showMarkers();
 
     // Create a searchbox for executing places search
@@ -359,7 +359,6 @@ function getNews(team) {
                     if (articles.length == 0) {
                         html +='<span>No articles available.</span>';
                     } else {
-                        console.log(articles);
                         html += '<ul>';
                         var lasttitle = '';
                         for(a in articles) {
