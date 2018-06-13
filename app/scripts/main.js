@@ -464,6 +464,12 @@ function TeamsViewModel() {
     self.goToFavorite = function(place) {
         searchForAPlace(place.id);
     }
+    self.removeFavorite = function(place) {
+        self.favorites.remove(function(item) {
+            return item.id == place.id;
+        });
+        localStorage.setItem('favorites', JSON.stringify(self.favorites()));
+    }
 };
 
 var viewModel = new TeamsViewModel();

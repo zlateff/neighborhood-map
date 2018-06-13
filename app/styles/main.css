@@ -45,11 +45,36 @@ nav {
     margin-top: 10px;
     border-radius: 8px;
 }
+.dropdown-list {
+    width: 190px;
+}
 .fav-li {
-    width: 250px;
-    padding: 10px;
+    height: 50px;
+}
+.li-div {
+    height: 100%;
     background-color: #7F9871;
     color: white;
+    float: left;
+}
+.fav-span {
+    width: 170px;
+    padding: 10px;
+    float: left;
+    overflow: hidden;
+    font-size: 0.9em;
+}
+.fa-div {
+    width: 18px;
+    padding-top: 15px;
+    float: left;
+}
+.favdellink {
+    text-decoration: none;
+    color: #C94F44;
+}
+.favdellink:hover {
+    color: rgb(145, 21, 10);
 }
 .places-button {
     color: white !important;
@@ -105,6 +130,7 @@ nav {
     color: white;
 }
 
+
 @media (max-width: 767px) {
     header {
         height: 50px;
@@ -119,6 +145,14 @@ nav {
     #map {
         height: 90%;
         width: 100%;
+    }
+    #teamlogo {
+        height: 80px;
+        width: 80px;
+    }
+    .logo {
+        width: 75px;
+        height: 75px;
     }
 }
 
