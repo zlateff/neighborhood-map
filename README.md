@@ -14,7 +14,7 @@ The Neighborhood Map project is a single page application developed using the Kn
 
 ### App functionalities
 * Automatically adapts to different viewports, adjusts bounds and zooms to accommodate all markers.
-* Navigation moves offcanvas on smaller viewports and opens and closes with a hamburger icon
+* Navigation moves [offcanvas](https://github.com/iamphill/Bootstrap-Offcanvas) on smaller viewports and opens and closes with a hamburger icon
 * Mapping functionality using Google Maps APIs
 * Shows sports venue StreetView when team marker clicked
 * Searching for places using the Google Places API offering suggestions
