@@ -1,3 +1,4 @@
+// Team data
 var teamsJson = {
     "Bears" : {
         id: 0,
@@ -44,7 +45,7 @@ var markers = [];
 var placeMarkers = [];
 
 function initMap() {
-    // Constructor creates a new map - only center and zoom are required.
+    // Constructor creates a new map and centers on Chicago
     map = new google.maps.Map(document.getElementById('map'), {
       center: {lat: 41.897745, lng: -87.645179},
       zoom: 12,
@@ -53,7 +54,7 @@ function initMap() {
 
     var largeInfowindow = new google.maps.InfoWindow();
 
-    // Create an array of markers on initialize
+    // Create an array of team markers on initialize
     var i = 0;
     for(var t in teamsJson) {
         // Get the latlong for the venue
@@ -68,24 +69,17 @@ function initMap() {
             animation: google.maps.Animation.DROP,
             id: i
         });
-        // Push marker to the global markers array
+        // Push marker to the global team markers array
         markers.push(marker);
-        // Create an onclick event to open an infowindow at each marker
+        // Create an onclick event to open an infowindow at each marker and bounce marker once
         marker.addListener('click', function() {
             viewModel.goToTeam(this.title);
             populateInfoWindow(this, largeInfowindow);
-        });
-        // Two event listeners - one for mouseover, one for mouseout,
-        // to bounce marker only once.
-        marker.addListener('mouseover', function() {
             var that = this;
             this.setAnimation(google.maps.Animation.BOUNCE);
             setTimeout(function () {
                 that.setAnimation(null);
             }, 700);
-        });
-        marker.addListener('mouseout', function() {
-            this.setAnimation(null);
         });
         i++;
     }
