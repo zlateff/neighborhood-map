@@ -360,7 +360,6 @@ function getNews(team) {
                             var title = articles[a].title;
                             if (title != lasttitle) {
                                 html += '<li><a href="' + articles[a].url + '" target="_blank">' + title + '</a></li>';
-                                html += '<li class="newsdivider"></li>';
                                 lasttitle = title;
                             }
                         }
