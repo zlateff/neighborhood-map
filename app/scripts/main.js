@@ -222,6 +222,7 @@ function createMarkersForPlaces(places) {
         }
     }
     map.fitBounds(bounds);
+    viewModel.showClearButton(true);
 }
 
 // This is the place details search
@@ -402,6 +403,7 @@ function TeamsViewModel() {
     }
     self.placeId = ko.observable();
     self.placeName = ko.observable();
+    self.showClearButton = ko.observable(false);
     
 
     // Behaviours
@@ -425,14 +427,17 @@ function TeamsViewModel() {
     self.clearAll = function() {
         self.searchInput(null);
         hideMarkers(placeMarkers);
+        self.showClearButton(false);
     }
     self.showBars = function() {
         self.goToTeam(self.chosenTeam());
         searchForPlaces('bars');
+        self.showClearButton(true);
     }
     self.showParking = function() {
         self.goToTeam(self.chosenTeam());
         searchForPlaces('parking');
+        self.showClearButton(true);
     }
     self.showArticles = function(html) {
         self.newsArticles(html);
@@ -462,6 +467,7 @@ function TeamsViewModel() {
     }
     self.goToFavorite = function(place) {
         searchForAPlace(place.id);
+        self.showClearButton(true);
     }
     self.removeFavorite = function(place) {
         self.favorites.remove(function(item) {

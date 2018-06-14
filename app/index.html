@@ -49,8 +49,8 @@
 
                     <div data-bind="visible: showSearch">
                         <ul class="nav navbar-nav">    
-                            <li><button type="button" class="btn places-button pointer" data-bind="click: showBars, style:{ 'background-color' :  bg_color }">Bars</a></li>
-                            <li><button type="button" class="btn places-button pointer" data-bind="click: showParking, style:{ 'background-color' :  bg_color }">Parking</a></li>
+                            <li><button type="button" class="btn places-button pointer" data-bind="click: showBars, style:{ 'background-color' :  bg_color }">Bars</button></li>
+                            <li><button type="button" class="btn places-button pointer" data-bind="click: showParking, style:{ 'background-color' :  bg_color }">Parking</button></li>
                             <li><button type="button" class="btn places-button dropdown-toggle pointer" data-bind="click: toggleNews, style:{ 'background-color' :  bg_color }">Latest News<span class="caret"></span></button></li>
                         </ul>
                     </div>
@@ -64,11 +64,11 @@
                             <input type="text" id="places-search" class="search-el form-control" placeholder="Ex: Bars, Restaurants" data-bind='value: searchInput'>
                         </div>
                         <input type="button" id="go-places" class="search-el btn btn-success" value="Go">
-                        <input type="button" class="search-el btn btn-default" value="Clear All Places" data-bind="click: clearAll">
+                        <input type="button" class="search-el btn btn-default" value="Clear Places Markers" data-bind="click: clearAll, visible: showClearButton">
                     </div>
 
                     <div class="navbar-left btn-group">
-                        <button type="button" class="btn fav-btn dropdown-toggle" data-toggle="dropdown">Favorite Places<span class="caret"></span></button>
+                        <button type="button" class="btn fav-btn dropdown-toggle pointer" data-toggle="dropdown">Favorite Places<span class="caret"></span></button>
                         <ul class="dropdown-menu scrollable-menu dropdown-list" role="menu" data-bind="foreach: favorites">
                             <li class="divider"></li>
                             <li class="fav-li pointer"><div class="li-div"><div class="fav-span" data-bind="text: $data.name,
