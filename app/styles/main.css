@@ -46,7 +46,7 @@ nav {
 }
 .fav-btn {
     color: white !important;
-    background-color: #7F9871 !important;
+    background-color: #261326 !important;
     margin-right: 10px;
     margin-top: 10px;
     border-radius: 8px;
@@ -59,7 +59,7 @@ nav {
 }
 .li-div {
     height: 100%;
-    background-color: #7F9871;
+    background-color: #261326;
     color: white;
     float: left;
 }
