@@ -500,6 +500,7 @@ function TeamsViewModel() {
         localStorage.setItem('favorites', JSON.stringify(self.favorites()));
     }
     self.goToPlace = function(marker) {
+        self.clearAll();
         placeMarkers.push(marker);
         marker.setMap(map);
         getPlacesDetails(marker, placeInfoWindow);
