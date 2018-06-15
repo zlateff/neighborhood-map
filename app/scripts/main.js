@@ -500,10 +500,14 @@ function TeamsViewModel() {
         localStorage.setItem('favorites', JSON.stringify(self.favorites()));
     }
     self.goToPlace = function(marker) {
-        self.clearAll();
         placeMarkers.push(marker);
         marker.setMap(map);
         getPlacesDetails(marker, placeInfoWindow);
+        var that = marker;
+        marker.setAnimation(google.maps.Animation.BOUNCE);
+            setTimeout(function () {
+                that.setAnimation(null);
+            }, 700);
         self.showClearButton(true);
     }
 };
