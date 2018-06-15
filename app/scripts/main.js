@@ -298,13 +298,13 @@ function putMarker(id) {
 }
 
 // This function searches for specific types of places and creates markers
-function searchForPlaces(place) {
-    var bounds = map.getBounds();
+function searchForPlaces(place, latlng) {
     hideMarkers(placeMarkers);
     var placesService = new google.maps.places.PlacesService(map);
     placesService.textSearch({
         query: place,
-        bounds: bounds
+        location: latlng,
+        radius: 1000
     }, function(results, status) {
         if (status === google.maps.places.PlacesServiceStatus.OK) {
             createMarkersForPlaces(results);
@@ -412,7 +412,10 @@ function TeamsViewModel() {
         self.teamLogo(teamsJson[team].logo);
         self.showSearch(true);
         putMarker(teamsJson[team].id);
-        getNews(team);
+        // getNews(team);
+        self.showBars(teamsJson[team].venueLocation);
+        self.showParking(teamsJson[team].venueLocation);
+        self.showClearButton(true);
     };
     self.showAll = function() {
         showMarkers();
@@ -428,15 +431,11 @@ function TeamsViewModel() {
         hideMarkers(placeMarkers);
         self.showClearButton(false);
     }
-    self.showBars = function() {
-        self.goToTeam(self.chosenTeam());
-        searchForPlaces('bars');
-        self.showClearButton(true);
+    self.showBars = function(latlng) {
+        searchForPlaces('bars', latlng);
     }
-    self.showParking = function() {
-        self.goToTeam(self.chosenTeam());
-        searchForPlaces('parking');
-        self.showClearButton(true);
+    self.showParking = function(latlng) {
+        searchForPlaces('parking', latlng);
     }
     self.showArticles = function(html) {
         self.newsArticles(html);
