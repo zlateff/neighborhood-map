@@ -81,7 +81,7 @@
                         <div class="form-group">
                             <input type="text" id="places-search" class="search-el form-control" placeholder="Ex: Bars, Restaurants" data-bind='value: searchInput'>
                         </div>
-                        <input type="button" id="go-places" class="search-el btn btn-success" value="Go">
+                        <input type="button" class="search-el btn btn-success" value="Go" data-bind="click: goPlaces">
                         <input type="button" class="search-el btn btn-default" value="Clear Places Markers" data-bind="click: clearAll, visible: showClearButton">
                     </div>
 

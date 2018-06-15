@@ -63,9 +63,6 @@ function initMap() {
     map.addListener('bounds_changed', function() {
         searchBox.setBounds(map.getBounds());
     });
-
-    // Add event listener to searchbox Go button
-    document.getElementById('go-places').addEventListener('click', textSearchPlaces);
     
     // Event listener for prediction list selection
     searchBox.addListener('places_changed', function() {
@@ -124,25 +121,24 @@ function initMap() {
             window.alert('We did not find any places matching that search!');
         }
     }
+}
 
-    // This function fires when the user hits the 'Go' button for places search
-    function textSearchPlaces() {
-        var place = document.getElementById('places-search').value;
-        if (place == '') {
-            window.alert('Please enter a place!');
-        } else {
-            var bounds = map.getBounds();
-            hideMarkers(placeMarkers);
-            var placesService = new google.maps.places.PlacesService(map);
-            placesService.textSearch({
-                query: place,
-                bounds: bounds
-            }, function(results, status) {
-                if (status === google.maps.places.PlacesServiceStatus.OK) {
-                    createMarkersForPlaces(results);
-                }
-            });
-        }
+// This function fires when the user hits the 'Go' button for places search
+function textSearchPlaces(place) {
+    if (place == '') {
+        window.alert('Please enter a place!');
+    } else {
+        var bounds = map.getBounds();
+        hideMarkers(placeMarkers);
+        var placesService = new google.maps.places.PlacesService(map);
+        placesService.textSearch({
+            query: place,
+            bounds: bounds
+        }, function(results, status) {
+            if (status === google.maps.places.PlacesServiceStatus.OK) {
+                createMarkersForPlaces(results);
+            }
+        });
     }
 }
 
@@ -303,7 +299,7 @@ function searchForAPlace(placeId) {
         placeId: placeId,
     };
       
-    service = new google.maps.places.PlacesService(map);
+    var service = new google.maps.places.PlacesService(map);
     service.getDetails(request, callback);
       
     function callback(place, status) {
@@ -437,6 +433,9 @@ function TeamsViewModel() {
         } else {
             self.showNews(true);
         }
+    }
+    self.goPlaces = function() {
+        textSearchPlaces(self.searchInput());
     }
     self.addToFavorites = function() {
         var newFavorite = {id: self.placeId(), name: self.placeName()};
