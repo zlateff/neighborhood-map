@@ -44,6 +44,10 @@ var markers = [];
 // Create placemarkers array to use in functions that serach for places
 var placeMarkers = [];
 
+// Create a global variable for a single infowindow to be used with the place details information
+// so that only one is open at once
+var placeInfoWindow;
+
 function initMap() {
     // Constructor creates a new map and centers on Chicago
     map = new google.maps.Map(document.getElementById('map'), {
@@ -178,7 +182,9 @@ function initMap() {
 }
 
 // This functions creates markers for each place found in places search
-function createMarkersForPlaces(places) {
+// The second 'bp' flag is used when function is called on team selection
+// It is used for the viewModel to create bar and parking locations dropdown lists
+function createMarkersForPlaces(places, bp) {
     var bounds = new google.maps.LatLngBounds();
     for (var i = 0; i < places.length; i++) {
         var place = places[i];
@@ -197,9 +203,8 @@ function createMarkersForPlaces(places) {
             position: place.geometry.location,
             id: place.place_id
         });
-        // Create a single infowindow to be used with the place details information
-        // so that only one is open at once
-        var placeInfoWindow = new google.maps.InfoWindow();
+        // Initiate the global infowindow variable
+        placeInfoWindow = new google.maps.InfoWindow();
         // If a marker is clicked, do a place details search on it
         marker.addListener('click', function() {
             if (placeInfoWindow.marker == this) {
@@ -214,6 +219,12 @@ function createMarkersForPlaces(places) {
             }
         });
         placeMarkers.push(marker);
+        if (bp == 1) {
+            viewModel.bars.push(marker);
+        }
+        if (bp == 2) {
+            viewModel.parking.push(marker);
+        }
         if (place.geometry.viewport) {
             // Only geocodes have viewport
             bounds.union(place.geometry.viewport);
@@ -283,23 +294,27 @@ function showMarkers() {
 }
 
 // This function will loop through a markers array and hide them all
-function hideMarkers(markers) {
+function hideMarkers(markers, forteams) {
     for (var i = 0; i < markers.length; i++) {
         markers[i].setMap(null);
+    }
+    // Empty placeMarkers array to avoid looping through markers that are not used anymore
+    // when hiding places markers the next time. Skip when hiding team markers
+    if (forteams != 1) {
+        placeMarkers = [];
     }
 }
 
 // This function will display marker for a specific team only
 function putMarker(id) {
-    hideMarkers(markers);
+    hideMarkers(markers, 1);
     markers[id].setMap(map);
     map.setCenter(markers[id].position);
     map.setZoom(16);
 }
 
-// This function searches for specific types of places and creates markers
+// This function searches for specific types of places(bars or parking) and creates markers
 function searchForPlaces(place, latlng) {
-    hideMarkers(placeMarkers);
     var placesService = new google.maps.places.PlacesService(map);
     placesService.textSearch({
         query: place,
@@ -307,12 +322,16 @@ function searchForPlaces(place, latlng) {
         radius: 1000
     }, function(results, status) {
         if (status === google.maps.places.PlacesServiceStatus.OK) {
-            createMarkersForPlaces(results);
+            if (place == 'bars') {
+                createMarkersForPlaces(results, 1);
+            } else {
+                createMarkersForPlaces(results, 2);
+            }
         }
     });
 }
 
-// This function searches for a place using place id
+// This function searches for a place using place id and displays marker and infowindow
 function searchForAPlace(placeId) {
     hideMarkers(placeMarkers);
     var request = {
@@ -327,6 +346,7 @@ function searchForAPlace(placeId) {
             var placesarray = [];
             placesarray.push({'name': place.name, 'place_id': place.place_id, 'icon': place.icon, 'geometry': place.geometry})
             createMarkersForPlaces(placesarray);
+            getPlacesDetails(placeMarkers[0], placeInfoWindow);
         }
     }
 }
@@ -403,6 +423,8 @@ function TeamsViewModel() {
     self.placeId = ko.observable();
     self.placeName = ko.observable();
     self.showClearButton = ko.observable(false);
+    self.bars = ko.observableArray();
+    self.parking = ko.observableArray();
     
 
     // Behaviours
@@ -413,13 +435,17 @@ function TeamsViewModel() {
         self.showSearch(true);
         putMarker(teamsJson[team].id);
         // getNews(team);
+        self.clearAll();
+        self.bars([]);
+        self.parking([]);
         self.showBars(teamsJson[team].venueLocation);
         self.showParking(teamsJson[team].venueLocation);
         self.showClearButton(true);
     };
     self.showAll = function() {
         showMarkers();
-        hideMarkers(placeMarkers);
+        self.clearAll();
+        self.showClearButton(false);
         self.showSearch(false);
         self.bg_color('#9795A3');
         self.chosenTeam('');
@@ -472,6 +498,13 @@ function TeamsViewModel() {
             return item.id == place.id;
         });
         localStorage.setItem('favorites', JSON.stringify(self.favorites()));
+    }
+    self.goToPlace = function(marker) {
+        self.clearAll();
+        placeMarkers.push(marker);
+        marker.setMap(map);
+        getPlacesDetails(marker, placeInfoWindow);
+        self.showClearButton(true);
     }
 };
 

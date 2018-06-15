@@ -49,8 +49,26 @@
 
                     <div data-bind="visible: showSearch">
                         <ul class="nav navbar-nav">    
-                            <li><button type="button" class="btn places-button pointer" data-bind="click: showBars, style:{ 'background-color' :  bg_color }">Bars</button></li>
-                            <li><button type="button" class="btn places-button pointer" data-bind="click: showParking, style:{ 'background-color' :  bg_color }">Parking</button></li>
+                            <li>
+                                <button type="button" class="btn places-button dropdown-toggle pointer" data-toggle="dropdown" data-bind="style:{ 'background-color' :  bg_color }">Bars<span class="caret"></span></button>
+                                <ul class="dropdown-menu scrollable-menu dropdown-list" role="menu" data-bind="foreach: bars">
+                                    <li class="divider"></li>
+                                    <li class="fav-li bp-list pointer" data-bind="text: $data.title,
+                                    click: $root.goToPlace.bind($data), style:{ 'background-color' :  $root.bg_color }">
+                                    </li>
+                                </ul>
+                            </li>
+
+                            <li>
+                                <button type="button" class="btn places-button dropdown-toggle pointer" data-toggle="dropdown" data-bind="style:{ 'background-color' :  bg_color }">Parking<span class="caret"></span></button>
+                                <ul class="dropdown-menu scrollable-menu dropdown-list" role="menu" data-bind="foreach: parking">
+                                    <li class="divider"></li>
+                                    <li class="fav-li bp-list pointer" data-bind="text: $data.title,
+                                    click: $root.goToPlace.bind($data), style:{ 'background-color' :  $root.bg_color }">
+                                    </li>
+                                </ul>
+                            </li>
+
                             <li><button type="button" class="btn places-button dropdown-toggle pointer" data-bind="click: toggleNews, style:{ 'background-color' :  bg_color }">Latest News<span class="caret"></span></button></li>
                         </ul>
                     </div>

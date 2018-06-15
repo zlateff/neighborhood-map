@@ -44,6 +44,12 @@ nav {
     background-color: #261326;
     color: white;
 }
+.bp-list {
+    padding: 10px;
+    font-size: 0.9em;
+    overflow: hidden;
+    color: white;
+}
 .fav-btn {
     color: white !important;
     background-color: #261326 !important;
