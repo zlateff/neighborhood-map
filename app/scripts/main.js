@@ -237,7 +237,8 @@ function getPlacesDetails(marker, infowindow) {
                 innerHTML += '<br><br><img src="' + place.photos[0].getUrl(
                     {maxHeight: 100, maxWidth: 200}) + '">';
             }
-            innerHTML += '</div>';
+            innerHTML += '<div data-bind="html: fsqInfo"></div></div>';
+            getFsqInfo(place.name, place.geometry.location.lat(), place.geometry.location.lng())
             infowindow.setContent(innerHTML);
             infowindow.open(map, marker);
             // Apply infowindow ViewModel bindings
@@ -250,6 +251,48 @@ function getPlacesDetails(marker, infowindow) {
             });
         }
     });
+}
+
+// This function gets place information from the Foursquare API
+function getFsqInfo(name, lat, lng) {
+    var url = 'https://api.foursquare.com/v2/venues/search?' +
+              'name=' + encodeURIComponent(name) +
+              '&ll=' + lat + ',' + lng +
+              '&intent=match' +
+              '&v=20180323' +
+              '&client_id=' + 'PX0XUBWTEQSGFTL5NK1NOCY2IXX5VAAJA4GBKTFVO1O2NRR5' +
+              '&client_secret=' + '3NKZA5IEDYQJLT2UMXSVF4VCI5IYIXUXNWYOO1FE23UOA5L1';
+    var req = new Request(url);
+    fetch(req)
+        .then(response => 
+            response.json().then(data => ({
+                data: data,
+                status: response.status
+            })).then(res => {
+                console.log(res.data);
+                var html = '<br>Type of place: <br>';
+                if (res.status == 200) {
+                    var venue = res.data.response.venues;
+                    if (venue.length == 0) {
+                        html +='<span>No Foursquare info available for this place.</span>';
+                    } else {
+                        html += '<ul class="list-unstyled">';
+                        if (venue[0].categories) {
+                            for (var i = 0; i < venue[0].categories.length; i++) {
+                                html += '<li><strong>' + venue[0].categories[i].name + '</strong></li>';
+                            }
+                        }
+                        html += '<li>Powered by: <a href="https://foursquare.com/" target="_blank">Foursquare</a></li></ul>';
+                    }
+                } else {
+                    html += '<span>Foursquare info could not be loaded.</span>';
+                }
+                windowViewModel.showFsq(html);
+            })
+        ).catch(function(error) {
+            window.alert('Foursquare info could not be loaded.');
+            console.log(error);
+        });
 }
 
 // This function will loop through the markers array and display them all
@@ -372,9 +415,13 @@ function windowViewModel() {
     var self = this;
     self.placeName = ko.observable();
     self.placeId = ko.observable();
+    self.fsqInfo = ko.observable();
 
     self.addFavorite = function() {
         viewModel.addToFavorites(self.placeId(), self.placeName());
+    }
+    self.showFsq = function(html) {
+        self.fsqInfo(html);
     }
 }
 
