@@ -206,11 +206,11 @@ function getPlacesDetails(marker, infowindow) {
         if (status === google.maps.places.PlacesServiceStatus.OK) {
             // Set the marker property on this infowindow so it isn't created again
             infowindow.marker = marker;
-            var innerHTML = '<div>';
+            var innerHTML = '<div id="info-content">';
             if (place.name) {
-                innerHTML += '<strong id="placeName">' + place.name + '</strong>';
-                innerHTML += '<span class="hidden" id="placeId">' + place.place_id + '</span>';
-                innerHTML += '<br><strong><a href="#" onclick="SaveFavorite();">Add to Favorites</a></strong>';
+                innerHTML += '<strong id="placeName" data-bind="text: placeName"></strong>';
+                innerHTML += '<span class="hidden" id="placeId" data-bind="text: placeId"></span>';
+                innerHTML += '<br><strong><a href="#"  id="addFav" data-bind="click: addFavorite">Add to Favorites</a></strong>';
             }
             if (place.formatted_address) {
                 innerHTML += '<br>' + place.formatted_address;
@@ -235,6 +235,10 @@ function getPlacesDetails(marker, infowindow) {
             innerHTML += '</div>';
             infowindow.setContent(innerHTML);
             infowindow.open(map, marker);
+            // Apply infowindow ViewModel bindings
+            ko.applyBindings(windowViewModel, document.getElementById('info-content'));
+            windowViewModel.placeName(place.name);
+            windowViewModel.placeId(place.place_id);
             // Make sure the marker property is cleared if the infowindow is closed.
             infowindow.addListener('closeclick', function() {
                 infowindow.marker = null;
@@ -344,7 +348,7 @@ function getNews(team) {
                                 lasttitle = title;
                             }
                         }
-                        html += '<li>Powered by: <a href="https://newsapi.org" target="_blank">News API</a></li></ul>';
+                        html += '<li>Powered by: <a href="https://newsapi.org" target="_blank">NewsAPI</a></li></ul>';
                     }
                 } else {
                     html += '<span>News articles could not be loaded!</span>';
@@ -357,13 +361,18 @@ function getNews(team) {
         });
 }
 
-// Function for saving a place to favorites
-function SaveFavorite() {
-    viewModel.placeName(document.getElementById("placeName").innerHTML);
-    viewModel.placeId(document.getElementById("placeId").innerHTML);
-    viewModel.addToFavorites();
+// ViewModel for the infowindows
+function windowViewModel() {
+    var self = this;
+    self.placeName = ko.observable();
+    self.placeId = ko.observable();
+
+    self.addFavorite = function() {
+        viewModel.addToFavorites(self.placeId(), self.placeName());
+    }
 }
 
+// The main ViewModel
 function TeamsViewModel() {
     // Data
     var self = this;
@@ -381,8 +390,6 @@ function TeamsViewModel() {
     if (localStorage.getItem('favorites') != null) {
         self.favorites(JSON.parse(localStorage.getItem('favorites')));
     }
-    self.placeId = ko.observable();
-    self.placeName = ko.observable();
     self.showClearButton = ko.observable(false);
     self.bars = ko.observableArray();
     self.parking = ko.observableArray();
@@ -395,7 +402,7 @@ function TeamsViewModel() {
         self.teamLogo(teamsJson[team].logo);
         self.showSearch(true);
         putMarker(teamsJson[team].id);
-        // getNews(team);
+        getNews(team);
         self.clearAll();
         self.bars([]);
         self.parking([]);
@@ -437,20 +444,20 @@ function TeamsViewModel() {
     self.goPlaces = function() {
         textSearchPlaces(self.searchInput());
     }
-    self.addToFavorites = function() {
-        var newFavorite = {id: self.placeId(), name: self.placeName()};
+    self.addToFavorites = function(placeId, placeName) {
+        var newFavorite = {id: placeId, name: placeName};
         var flag = 0;
         for (var i = 0; i < self.favorites().length; i++) {
-            if (self.favorites()[i]['id'] == self.placeId()) {
+            if (self.favorites()[i]['id'] == placeId) {
                 flag++;
-                window.alert('\'' + self.placeName() + '\' is already in your Favorites!');
+                window.alert('\'' + placeName + '\' is already in your Favorites!');
                 break;
             }
         }
         if (flag == 0) {
             self.favorites.push(newFavorite);
             localStorage.setItem('favorites', JSON.stringify(self.favorites()));
-            window.alert('\'' + self.placeName() + '\' was added to your Favorites!');
+            window.alert('\'' + placeName + '\' was added to your Favorites!');
         }
     }
     self.goToFavorite = function(place) {
@@ -477,5 +484,6 @@ function TeamsViewModel() {
     }
 };
 
+var windowViewModel = new windowViewModel();
 var viewModel = new TeamsViewModel();
 ko.applyBindings(viewModel);
