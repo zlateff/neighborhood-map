@@ -123,6 +123,11 @@ function initMap() {
     }
 }
 
+// Google Maps error handler
+function googleError() {
+    window.alert('Maps could not be loaded.');
+}
+
 // This function fires when the user hits the 'Go' button for places search
 function textSearchPlaces(place) {
     if (place == '') {
