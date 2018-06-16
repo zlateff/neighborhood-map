@@ -341,7 +341,7 @@ function getNews(team) {
                     } else {
                         html += '<ul>';
                         var lasttitle = '';
-                        for(a in articles) {
+                        for(var a = 0; a < articles.length; a++) {
                             var title = articles[a].title;
                             if (title != lasttitle) {
                                 html += '<li><a href="' + articles[a].url + '" target="_blank">' + title + '</a></li>';
@@ -357,6 +357,7 @@ function getNews(team) {
                 viewModel.showArticles(html);
             })
         ).catch(function(error) {
+            window.alert('Team news could not be loaded.');
             console.log(error);
         });
 }

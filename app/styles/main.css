@@ -16,6 +16,7 @@ nav {
     box-shadow: none !important;
     overflow: hidden !important;
     overflow-y: auto !important;
+    padding-bottom: 20px;
 }
 .navbar-left {
     clear: both;
