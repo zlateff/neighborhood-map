@@ -89,7 +89,7 @@ function initMap() {
                     var nearStreetViewLocation = data.location.latLng;
                     var heading = google.maps.geometry.spherical.computeHeading(
                                     nearStreetViewLocation, marker.position);
-                    infowindow.setContent('<div>' + marker.title + '</div><div id="pano"></div>');
+                    infowindow.setContent('<div>' + marker.title + '</div><div id="pano" class="pano-canvas"></div>');
                     var panoramaOptions = {
                         position: nearStreetViewLocation,
                         pov: {
@@ -270,7 +270,7 @@ function getFsqInfo(name, lat, lng) {
                 data: data,
                 status: response.status
             })).then(res => {
-                console.log(res.data);
+                // console.log(res.data);
                 var html = '<br>Type of place: <br>';
                 if (res.status == 200) {
                     var venue = res.data.response.venues;

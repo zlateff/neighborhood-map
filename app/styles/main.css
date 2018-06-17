@@ -1,7 +1,9 @@
-html, body {
+html, 
+body {
     height: 100%;
     background-color: #9795A3;
 }
+
 header {
     height: 100%;
     width: 25%;
@@ -9,6 +11,7 @@ header {
     padding-right: 10px;
     padding-left: 10px;
 }
+
 nav {
     margin-top: 20px;
     height: 95%;
@@ -18,18 +21,22 @@ nav {
     overflow-y: auto !important;
     padding-bottom: 20px;
 }
+
 .navbar-left {
     clear: both;
 }
+
 .navbar-form {
     padding-left: 0;
 }
-#title {
+
+.title {
     margin-left: 10px;
     color: black;
     font-family: 'Bangers', cursive;
     font-size: 1.2em;
 }
+
 .team-btn {
     color: white !important;
     background-color: #261326 !important;
@@ -37,20 +44,24 @@ nav {
     margin-top: 10px;
     border-radius: 8px;
 }
+
 .divider {
     margin: 0 !important;
 }
+
 .team-li {
     padding: 20px;
     background-color: #261326;
     color: white;
 }
+
 .bp-list {
     padding: 10px;
     font-size: 0.9em;
     overflow: hidden;
     color: white;
 }
+
 .fav-btn {
     color: white !important;
     background-color: #261326 !important;
@@ -58,18 +69,22 @@ nav {
     margin-top: 10px;
     border-radius: 8px;
 }
+
 .dropdown-list {
     width: 190px;
 }
+
 .fav-li {
     height: 45px;
 }
+
 .li-div {
     height: 100%;
     background-color: #261326;
     color: white;
     float: left;
 }
+
 .fav-span {
     width: 170px;
     padding: 10px;
@@ -77,79 +92,98 @@ nav {
     overflow: hidden;
     font-size: 0.9em;
 }
+
 .fa-div {
     width: 18px;
     padding-top: 12px;
     float: left;
 }
+
 .favdellink {
     text-decoration: none;
     color: #C94F44;
 }
+
 .favdellink:hover {
     color: rgb(145, 21, 10);
 }
+
 .places-button {
     color: white !important;
     margin-right: 10px;
     margin-top: 10px;
     border-radius: 8px;
 }
+
 .search-el {
     margin-top: 10px;
 }
-#mapbox {
+
+.mapbox {
     height: 99%;
     width: 100%;
     padding: 20px;
 }
-#map {
+
+.map-canvas {
     height: 100%;
     width: auto;
 }
-#pano {
+
+.pano-canvas {
     width: 200px;
     height: 200px;
 }
-#teambox {
+
+.teambox {
     clear: both;
 }
-#teamlogo {
+
+.teamlogo {
     height: 130px;
     width: 130px;
     display: inline-block;
 }
-#teamname {
+
+.teamname {
     font-size: 2em;
     clear: left;
 }
+
 .logo {
     display: inline-block;
     width: 128px;
     height: 128px;
 }
-#news {
+
+.news {
     border: solid #9795A3 1px;
     border-radius: 8px;
     padding-left: 10px;
 }
-#news ul {
+
+.news ul {
     padding: 0;
     list-style-type: none;
 }
-#news li {
+
+.news li {
     padding: 5px;
     background:#CCC;
 }
-#news li:nth-child(odd) {
+
+.news li:nth-child(odd) {
      background: #FFF; 
 }
-#copy {
+
+.copy {
     color: white;
 }
+
 .pointer { 
     cursor: pointer;
 }
+
 .pointer:hover {
     opacity: 0.8;
 }
@@ -160,20 +194,25 @@ nav {
         height: 50px;
         width: 100%;
     }
+
     nav {
         margin-top: 0;
     }
-    #mapbox {
+
+    .mapbox {
         padding: 0;
     }
-    #map {
+
+    .map-canvas {
         height: 90%;
         width: 100%;
     }
-    #teamlogo {
+
+    .teamlogo {
         height: 80px;
         width: 80px;
     }
+
     .logo {
         width: 75px;
         height: 75px;
