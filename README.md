@@ -5,7 +5,7 @@ The deployed application can be accessed [here](https://www.zlateff.com/gameday/
 
 ## About
 
-The Neighborhood Map project is a single page application developed using the Knockout.JS framework and number of APIs. The app allows users in the Chicago area to find entertainment and parking near their sports team venue, and to save places to their favorites list. Aside from the various Google Maps APIs, team news information is added using the News API. 
+The Neighborhood Map project is a single page application developed using the Knockout.JS framework and number of APIs. The app allows users in the Chicago area to find entertainment and parking near their sports team venue, and to save places to their favorites list. Aside from the various Google Maps APIs, team news information is added using the [NewsAPI](https://newsapi.org/). Additional information about places found with the Google Places API is pulled using the [Foursquare API](https://developer.foursquare.com/).
 
 ### Getting started
 
@@ -19,4 +19,5 @@ The Neighborhood Map project is a single page application developed using the Kn
 * Shows sports venue StreetView when team marker clicked
 * Searching for places using the Google Places API offering suggestions
 * Feature to add/remove places to a Favorites list saved in localStorage
-* Access to the latest team news pulled using News API
+* Additional information about places is provided using [Foursquare API](https://developer.foursquare.com/)
+* Access to the latest team news pulled using [NewsAPI](https://newsapi.org/)
