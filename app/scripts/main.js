@@ -118,7 +118,7 @@ function initMap() {
         var places = searchBox.getPlaces();
         // For each place, get the icon, name and location
         createMarkersForPlaces(places);
-        if (places.length == 0) {
+        if (places.length === 0) {
             window.alert('We did not find any places matching that search!');
         }
     }
@@ -131,7 +131,7 @@ function googleError() {
 
 // This function fires when the user hits the 'Go' button for places search
 function textSearchPlaces(place) {
-    if (place == '') {
+    if (place === '') {
         window.alert('Please enter a place!');
     } else {
         var bounds = map.getBounds();
@@ -175,7 +175,7 @@ function createMarkersForPlaces(places, bp) {
         // If a marker is clicked, do a place details search on it
         marker.addListener('click', function() {
             if (placeInfoWindow.marker == this) {
-                console.log("This infowindow already is on this marker!")
+                console.log("This infowindow already is on this marker!");
             } else {
                 var that = this;
                 this.setAnimation(google.maps.Animation.BOUNCE);
@@ -239,7 +239,7 @@ function getPlacesDetails(marker, infowindow) {
                     {maxHeight: 100, maxWidth: 200}) + '">';
             }
             innerHTML += '<div data-bind="html: fsqInfo"></div></div>';
-            getFsqInfo(place.name, place.geometry.location.lat(), place.geometry.location.lng())
+            getFsqInfo(place.name, place.geometry.location.lat(), place.geometry.location.lng());
             infowindow.setContent(innerHTML);
             infowindow.open(map, marker);
             // Apply infowindow ViewModel bindings
@@ -274,7 +274,7 @@ function getFsqInfo(name, lat, lng) {
                 var html = '<br>Type of place: <br>';
                 if (res.status == 200) {
                     var venue = res.data.response.venues;
-                    if (venue.length == 0) {
+                    if (venue.length === 0) {
                         html +='<span>No Foursquare info available for this place.</span>';
                     } else {
                         html += '<ul class="list-unstyled">';
@@ -358,7 +358,7 @@ function searchForAPlace(placeId) {
     function callback(place, status) {
         if (status == google.maps.places.PlacesServiceStatus.OK) {
             var placesarray = [];
-            placesarray.push({'name': place.name, 'place_id': place.place_id, 'icon': place.icon, 'geometry': place.geometry})
+            placesarray.push({'name': place.name, 'place_id': place.place_id, 'icon': place.icon, 'geometry': place.geometry});
             createMarkersForPlaces(placesarray);
             getPlacesDetails(placeMarkers[0], placeInfoWindow);
         }
@@ -385,7 +385,7 @@ function getNews(team) {
                 var html = '<div><h4>Latest ' + team + ' news:</h4>';
                 if (res.status == 200) {
                     var articles = res.data.articles;
-                    if (articles.length == 0) {
+                    if (articles.length === 0) {
                         html +='<span>No articles available.</span>';
                     } else {
                         html += '<ul>';
@@ -420,10 +420,10 @@ function windowViewModel() {
 
     self.addFavorite = function() {
         viewModel.addToFavorites(self.placeId(), self.placeName());
-    }
+    };
     self.showFsq = function(html) {
         self.fsqInfo(html);
-    }
+    };
 }
 
 // The main ViewModel
@@ -441,7 +441,7 @@ function TeamsViewModel() {
     self.newsArticles = ko.observable();
     // Favorite places array
     self.favorites = ko.observableArray();
-    if (localStorage.getItem('favorites') != null) {
+    if (localStorage.getItem('favorites') !== null) {
         self.favorites(JSON.parse(localStorage.getItem('favorites')));
     }
     self.showClearButton = ko.observable(false);
@@ -478,52 +478,52 @@ function TeamsViewModel() {
         self.searchInput(null);
         hideMarkers(placeMarkers);
         self.showClearButton(false);
-    }
+    };
     self.showBars = function(latlng) {
         searchForPlaces('bars', latlng);
-    }
+    };
     self.showParking = function(latlng) {
         searchForPlaces('parking', latlng);
-    }
+    };
     self.showArticles = function(html) {
         self.newsArticles(html);
-    }
+    };
     self.toggleNews = function() {
         if (self.showNews()) {
             self.showNews(false);
         } else {
             self.showNews(true);
         }
-    }
+    };
     self.goPlaces = function() {
         textSearchPlaces(self.searchInput());
-    }
+    };
     self.addToFavorites = function(placeId, placeName) {
         var newFavorite = {id: placeId, name: placeName};
         var flag = 0;
         for (var i = 0; i < self.favorites().length; i++) {
-            if (self.favorites()[i]['id'] == placeId) {
+            if (self.favorites()[i].id == placeId) {
                 flag++;
                 window.alert('\'' + placeName + '\' is already in your Favorites!');
                 break;
             }
         }
-        if (flag == 0) {
+        if (flag === 0) {
             self.favorites.push(newFavorite);
             localStorage.setItem('favorites', JSON.stringify(self.favorites()));
             window.alert('\'' + placeName + '\' was added to your Favorites!');
         }
-    }
+    };
     self.goToFavorite = function(place) {
         searchForAPlace(place.id);
         self.showClearButton(true);
-    }
+    };
     self.removeFavorite = function(place) {
         self.favorites.remove(function(item) {
             return item.id == place.id;
         });
         localStorage.setItem('favorites', JSON.stringify(self.favorites()));
-    }
+    };
     self.goToPlace = function(marker) {
         self.clearAll();
         placeMarkers.push(marker);
@@ -535,8 +535,8 @@ function TeamsViewModel() {
                 that.setAnimation(null);
             }, 700);
         self.showClearButton(true);
-    }
-};
+    };
+}
 
 var windowViewModel = new windowViewModel();
 var viewModel = new TeamsViewModel();
